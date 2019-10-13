@@ -17,28 +17,25 @@ public class Lz78 {
 
         int i = 0;
         while (i < text.length()){
-            String charSequence = "";
             System.out.println(i);
             String currentCharachter = String.valueOf(text.charAt(i));
+            String charSequence = currentCharachter;
             int dictionaryIndex = dictionary.elementIndex(currentCharachter);
             if (dictionaryIndex == -1) {
                 dictionary.insertElement(currentCharachter);
                 Tag tag = new Tag(0, text.charAt(i));
                 Compressed.add(tag);
-                charSequence = currentCharachter;
             } else {
                 int nextCharachterIndex = i + 1;
                 if (nextCharachterIndex < text.length()) {
-                    charSequence = currentCharachter + text.charAt(nextCharachterIndex);
                     while (dictionary.elementIndex(charSequence) != -1) {
                         dictionaryIndex = dictionary.elementIndex(charSequence);
                         if (nextCharachterIndex < text.length() && dictionaryIndex != -1) {
-                            charSequence = charSequence + text.charAt(nextCharachterIndex);
+                            charSequence = charSequence + text.charAt(nextCharachterIndex) ;
                         } else{
                             nextCharachterIndex--;
                             break;
                         }
-                        nextCharachterIndex++;
                     }
                     dictionary.insertElement(charSequence);
                     Tag tag = new Tag(dictionaryIndex, text.charAt(i+charSequence.length()-1));
