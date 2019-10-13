@@ -56,9 +56,14 @@ public class Lz78 {
     }
 
     public String deCompress() {
+        dictionary = new Dictionary();
         text = Compressed
                 .stream()
-                .map(tag -> dictionary.getElement(tag.getDictionaryIndex()) + tag.getNextChar())
+                .map(tag -> {
+                    String sequence = dictionary.getElement(tag.getDictionaryIndex()) + tag.getNextChar();
+                    dictionary.insertElement(sequence);
+                    return sequence;
+                })
                 .collect(Collectors.joining());
         return text;
     }

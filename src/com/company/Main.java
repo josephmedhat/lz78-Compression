@@ -13,6 +13,8 @@ public class Main {
         Lz78 lz78=new Lz78(text);
         lz78.Compress();
         lz78.getCompressedText();
+
+        lz78.deCompress();
         System.out.println(lz78.deCompress());
 
     }
