@@ -12,6 +12,14 @@ public class Tag {
         this.nextChar = nextChar;
     }
 
+    public int getDictionaryIndex() {
+        return dictionaryIndex;
+    }
+
+    public char getNextChar() {
+        return nextChar != '\0' ? nextChar : ' ';
+    }
+
     public String getTag(){
         return "<"+dictionaryIndex+","+nextChar+">";
     }

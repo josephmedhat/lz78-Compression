@@ -27,6 +27,10 @@ public class Dictionary {
         dictionary.add(newEntry);
     }
 
+    public String getElement(int index){
+        return dictionary.get(index) == null ? "" : dictionary.get(index);
+    }
+
     public int dictionarySize() {
         return dictionary.size();
     }

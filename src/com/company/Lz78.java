@@ -1,6 +1,8 @@
 package com.company;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class Lz78 {
     private String text;
@@ -13,10 +15,16 @@ public class Lz78 {
         Compressed = new ArrayList<Tag>();
     }
 
-    public void Compress() {
+    public Lz78(ArrayList<Tag> compressed) {
+        Compressed = compressed;
+        dictionary = new Dictionary();
+        text = "";
+    }
+
+    public ArrayList<Tag> Compress() {
 
         int i = 0;
-        while (i < text.length()){
+        while (i < text.length()) {
             Tag tag;
             String charSequence = String.valueOf(text.charAt(i));
             int dictionaryIndex = dictionary.elementIndex(charSequence);
@@ -28,22 +36,31 @@ public class Lz78 {
                 if (nextCharachterIndex < text.length()) {
                     while (dictionary.elementIndex(charSequence) != -1) {
                         dictionaryIndex = dictionary.elementIndex(charSequence);
-                        if (nextCharachterIndex < text.length() && dictionaryIndex != -1) {
-                            charSequence = charSequence + text.charAt(nextCharachterIndex) ;
+                        if (nextCharachterIndex < text.length()) {
+                            charSequence = charSequence + text.charAt(nextCharachterIndex);
                             nextCharachterIndex++;
-                        } else{
-                            break;
+                            continue;
                         }
+                        break;
                     }
                     dictionary.insertElement(charSequence);
-                    tag = new Tag(dictionaryIndex, text.charAt(i+charSequence.length()-1));
-                }else {
+                    tag = new Tag(dictionaryIndex, text.charAt(i + charSequence.length() - 1));
+                } else {
                     tag = new Tag(dictionaryIndex, '\0');
                 }
             }
             Compressed.add(tag);
             i += charSequence.length();
         }
+        return Compressed;
+    }
+
+    public String deCompress() {
+        text = Compressed
+                .stream()
+                .map(tag -> dictionary.getElement(tag.getDictionaryIndex()) + tag.getNextChar())
+                .collect(Collectors.joining());
+        return text;
     }
 
     public void getCompressedText() {
