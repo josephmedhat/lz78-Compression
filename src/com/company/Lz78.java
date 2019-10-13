@@ -14,44 +14,46 @@ public class Lz78 {
     }
 
     public void Compress() {
-        for (int i = 0; i < text.length(); i++) {
+
+        int i = 0;
+        while (i < text.length()){
+            String charSequence = "";
+            System.out.println(i);
             String currentCharachter = String.valueOf(text.charAt(i));
             int dictionaryIndex = dictionary.elementIndex(currentCharachter);
             if (dictionaryIndex == -1) {
                 dictionary.insertElement(currentCharachter);
                 Tag tag = new Tag(0, text.charAt(i));
                 Compressed.add(tag);
-            }
-            else
-            {
-                int nextCharachterIndex=i+1;
-                if (nextCharachterIndex<text.length() ){
-                    String charSequence=currentCharachter+text.charAt(nextCharachterIndex);
-                    while(dictionary.elementIndex(charSequence) != -1 ){
-                        dictionaryIndex=dictionary.elementIndex(charSequence);
-                        nextCharachterIndex++;
-                        if (nextCharachterIndex<text.length() ) {
-                            charSequence=charSequence+text.charAt(nextCharachterIndex);
-                        }
-                        else
+                charSequence = currentCharachter;
+            } else {
+                int nextCharachterIndex = i + 1;
+                if (nextCharachterIndex < text.length()) {
+                    charSequence = currentCharachter + text.charAt(nextCharachterIndex);
+                    while (dictionary.elementIndex(charSequence) != -1) {
+                        dictionaryIndex = dictionary.elementIndex(charSequence);
+                        if (nextCharachterIndex < text.length() && dictionaryIndex != -1) {
+                            charSequence = charSequence + text.charAt(nextCharachterIndex);
+                        } else{
+                            nextCharachterIndex--;
                             break;
+                        }
+                        nextCharachterIndex++;
                     }
                     dictionary.insertElement(charSequence);
-                    Tag tag = new Tag(dictionaryIndex, text.charAt(nextCharachterIndex));
+                    Tag tag = new Tag(dictionaryIndex, text.charAt(i+charSequence.length()-1));
                     Compressed.add(tag);
                 }
-
             }
+            i += charSequence.length();
         }
     }
 
-    public void getCompressedText(){
+    public void getCompressedText() {
         for (int i = 0; i < Compressed.size(); i++) {
             System.out.println(Compressed.get(i).getTag());
         }
         System.out.println("--------------------- Dictionary ------------------------");
         dictionary.getDictionary();
     }
-
-
 }

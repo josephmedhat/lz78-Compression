@@ -11,7 +11,7 @@ public class Dictionary {
     }
 
     public int elementIndex(String ch) {
-        if (dictionary.size() > 1){
+        if (dictionary.size() > 0){
             for (int i = 1; i < dictionary.size(); i++) {
 
                 if (dictionary.get(i).equals(ch)) {
