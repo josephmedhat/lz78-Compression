@@ -17,14 +17,12 @@ public class Lz78 {
 
         int i = 0;
         while (i < text.length()){
-            System.out.println(i);
-            String currentCharachter = String.valueOf(text.charAt(i));
-            String charSequence = currentCharachter;
-            int dictionaryIndex = dictionary.elementIndex(currentCharachter);
+            Tag tag;
+            String charSequence = String.valueOf(text.charAt(i));
+            int dictionaryIndex = dictionary.elementIndex(charSequence);
             if (dictionaryIndex == -1) {
-                dictionary.insertElement(currentCharachter);
-                Tag tag = new Tag(0, text.charAt(i));
-                Compressed.add(tag);
+                dictionary.insertElement(charSequence);
+                tag = new Tag(0, text.charAt(i));
             } else {
                 int nextCharachterIndex = i + 1;
                 if (nextCharachterIndex < text.length()) {
@@ -32,16 +30,18 @@ public class Lz78 {
                         dictionaryIndex = dictionary.elementIndex(charSequence);
                         if (nextCharachterIndex < text.length() && dictionaryIndex != -1) {
                             charSequence = charSequence + text.charAt(nextCharachterIndex) ;
+                            nextCharachterIndex++;
                         } else{
-                            nextCharachterIndex--;
                             break;
                         }
                     }
                     dictionary.insertElement(charSequence);
-                    Tag tag = new Tag(dictionaryIndex, text.charAt(i+charSequence.length()-1));
-                    Compressed.add(tag);
+                    tag = new Tag(dictionaryIndex, text.charAt(i+charSequence.length()-1));
+                }else {
+                    tag = new Tag(dictionaryIndex, '\0');
                 }
             }
+            Compressed.add(tag);
             i += charSequence.length();
         }
     }
